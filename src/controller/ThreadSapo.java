@@ -6,8 +6,10 @@ public class ThreadSapo extends Thread {
 	final int distPulo;
 	final int distCorrida;
 	int sapo;
+	
+	//Variáveis para manipulação interna
 	static int posicao = 1;
-	static int[][] matrizPos = new int[2][5];
+	static int[] podio = new int[5];
 	
 	public ThreadSapo(int distCorrida, int sapo) {
 		this.distCorrida = distCorrida;
@@ -26,14 +28,35 @@ public class ThreadSapo extends Thread {
 		int pulou = 0;
 		
 		while(pulou < distCorrida) {
-			int pulo = rand.nextInt(distPulo);
+			int pulo = rand.nextInt(1,distPulo);
 				
-			System.out.println("Sapo " + sapo + " pulou " + pulo + " metros");
+			System.out.println("Sapo " + sapo + " pulou " + pulo + " metros. Total percorrido: " + pulou);
 			pulou += pulo;
+			
+			try {
+				Thread.sleep(rand.nextInt(100,800));//Delay no sapo
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
-		System.out.println("\nO sapo " + sapo + " chegou em " + posicao + "�\n");
-		++posicao;
+		System.out.println("\nO sapo " + sapo + " terminou a corrida \n");
 		
+		podio(sapo);
+		
+		++posicao;	
+	}
+	
+	private void podio(int sapo) {
+		
+		podio[posicao-1] = sapo;
+		
+		if(posicao >= 5) {
+			
+			System.out.println("***Pódio da corrida de sapos***");
+			for (int i = 0; i < 5; i++) {
+				System.out.println("O sapo " + podio[i] + " chegou em " + (i+1) + "°");
+			}
+		}
 	}
 }
